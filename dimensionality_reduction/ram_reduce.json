@@ -1,0 +1,21 @@
+{
+  "data": {
+    "path": "/Users//data/rollout2",
+    "game": "SeaquestNoFrameskip-v4",
+    "key": "ram",
+    "algos": {
+      "a2c": [1, 2, 3],
+      "apex": [1, 2, 3],
+      "dqn": [1, 2, 3],
+      "es":[1, 2, 3],
+      "ga":[1, 2, 3],
+      "rainbow":[1, 2, 3]
+    }
+  },
+  "method": {
+    "name": "pca_tsne",
+    "pca_dim": 50,
+    "perplexity": 30,
+    "n_iter": 3000
+  }
+}

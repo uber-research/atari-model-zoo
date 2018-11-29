@@ -1,0 +1,13 @@
+{
+  "data": {
+    "path": "/Users//data/rollout",
+    "game": "SeaquestNoFrameskip-v4",
+    "key": "representation_2d",
+    "algos": {
+      "apex": [3]
+    }
+  },
+  "method": {
+    "name": "pca_tsne"
+  }
+}

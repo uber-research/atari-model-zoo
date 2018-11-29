@@ -1,0 +1,16 @@
+{
+  "data": {
+    "path": "/Users/ailabs/data/rollout",
+    "game": "FrostbiteNoFrameskip-v4",
+    "key": "representation",
+    "algos": {
+      "a2c": [3]
+    }
+  },
+  "method": {
+    "name": "pca_tsne",
+    "pca_dim": 50,
+    "perplexity": 30,
+    "n_iter": 1000
+  }
+}
