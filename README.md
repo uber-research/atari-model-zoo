@@ -1,7 +1,7 @@
 # Atari Zoo
 
 The aim of this project is to disseminate deep reinforcement learning agents trained by a variety of algorithms, and to enable easy analysis, comparision, and visualization of them. The hope is to reduce friction for further 
-research into understanding reinforcement leanring agents. 
+research into understanding reinforcement learning agents. 
 This project makes use of the excellent [Lucid](https://github.com/tensorflow/lucid) neural network visualization library, and integrates with the [Dopamine](https://github.com/google/dopamine) [model release](https://github.com/google/dopamine/tree/master/docs#downloads).
 
 ## About
