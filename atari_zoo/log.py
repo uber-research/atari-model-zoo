@@ -27,7 +27,8 @@ def parse_checkpoint_info(json_data):
     ckt_points = {}
     for entry in json_data:
         tag = entry['criteria']
-        ckt_points[tag]=entry['best_checkpoint']
+        if entry['best_checkpoint']!=None:
+            ckt_points[tag]=entry['best_checkpoint']
     return ckt_points
 
 """
