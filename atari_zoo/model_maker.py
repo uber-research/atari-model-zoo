@@ -286,7 +286,7 @@ class RL_Rainbow_dopamine(RL_model):
      {'type': 'dense', 'name': 'Online/Sum', 'size':18}
    ]
 
-  additional_layers={'c51':{'type':'dense','name:': 'Online/fully_connected_1/BiasAdd', 'size':18*51}}
+  additional_layers={'c51':{'type':'dense','name': 'Online/fully_connected_1/BiasAdd', 'size':18*51}}
 
  
   def get_action(self,model):
