@@ -23,7 +23,7 @@ datadir_remote_dict = {'apex':"https://dgqeqexrlnkvd.cloudfront.net/zoo/apex",
                          'ga':"https://dgqeqexrlnkvd.cloudfront.net/zoo/ga",
                          'a2c':"https://dgqeqexrlnkvd.cloudfront.net/zoo/a2c",
                          'rainbow':"https://dgqeqexrlnkvd.cloudfront.net/zoo/rainbow",
-                       'dqn':"https://dgqeqexrlnkvd.cloudfront.net/zoo/rainbow"}
+                       'dqn':"https://dgqeqexrlnkvd.cloudfront.net/zoo/dqn"}
 
 url_formatter_dict = {('rainbow','remote'):dopamine_url_formatter,('dqn','remote'):dopamine_url_formatter}
 
