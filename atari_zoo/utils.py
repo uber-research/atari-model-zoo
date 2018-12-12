@@ -267,18 +267,68 @@ def MakeVideo(m,fps=60.0,skip=1,video_fn='./tmp.mp4'):
     for x in range(0,frames.shape[0],skip):
         writer.write_frame(frames[x])
     writer.close()
+
+def load_clip_from_cache(algo,env,run_id,tag="final",video_cache="."):
+
+    i_video_fn ="%s/%s-%s-%d-%s.mp4" % (video_cache,algo,env,run_id,tag)
+
+    return  mpy.VideoFileClip(i_video_fn)
+
+
+def movie_grid(clip_dict,x_labels,y_labels,grid_sz_x,grid_sz_y,label_padding=50,padding=5,label_fontsize=20):
+    key = list(clip_dict.keys())[0]
+    exemplar = clip_dict[key]
+    size_x,size_y = exemplar.size
+    duration = exemplar.duration
+
+    x_step = (size_x+padding)
+    y_step = (size_y+padding)
+
+    composite_size = (label_padding + x_step * grid_sz_x), (label_padding + y_step * grid_sz_y)
+
+    #load in all the movie clips
+    for _x in range(grid_sz_x):
+        for _y in range(grid_sz_y):
+            pos =(label_padding + _x*x_step,label_padding + _y*y_step)
+            clip_dict[(_x,_y)] = clip_dict[(_x,_y)].set_position(pos)
+            #clip.write_gif(o_video_fn)
+
+    clip_list = []
+    #add background clip
+    clip_list.append(mpy.ColorClip(size=composite_size, color=(255,255,255)))
+
+    #now add x and y labels
+    l_idx = 0
+    if y_labels != None:
+        for label in y_labels:
+            txtClip = mpy.TextClip(label,color='black', fontsize=label_fontsize).set_position((0,label_padding+y_step*l_idx+(y_step/2)))
+            l_idx+=1
+            clip_list.append(txtClip)
+
+    l_idx = 0
+    if x_labels != None:
+        for label in x_labels:
+            txtClip = mpy.TextClip(label,color='black', fontsize=label_fontsize).set_position((label_padding+x_step*l_idx,label_padding/2))
+            l_idx+=1
+            clip_list.append(txtClip)
     
-def rollout_grid(env,algos,run_ids,clip_resize=0.5,label_fontsize=20,out_fn="composite.mp4",video_cache="."):
+    for key in clip_dict:
+        clip_list.append(clip_dict[key])
+    
+    cc = mpy.CompositeVideoClip(clip_list,composite_size)
+    return cc
+
+
+
+
+def rollout_grid(env,algos,run_ids,tag='final',clip_resize=0.5,label_fontsize=20,out_fn="composite.mp4",video_cache=".",length=None):
 
     clip_dict = {}
     key = None
     for algo in algos:
         for run_id in run_ids:
-            i_video_fn ="%s/%s-%s-%d.mp4" % (video_cache,algo,env,run_id)
-
             key = (algo,run_id)
-            clip_dict[key] = (mpy.VideoFileClip(i_video_fn)
-                .resize(clip_resize))
+            clip_dict[key] = load_clip_from_cache(algo,env,run_id,tag,video_cache).resize(clip_resize)
             
     exemplar = clip_dict[key]
     size_x,size_y = exemplar.size
@@ -334,6 +384,10 @@ def rollout_grid(env,algos,run_ids,clip_resize=0.5,label_fontsize=20,out_fn="com
         clip_list.append(clip_dict[key])
     
     cc = mpy.CompositeVideoClip(clip_list,composite_size)
+
+    if length!=None:
+        duration = length
+
     cc = cc.resize(1.0).subclip(0,duration)
 
     if out_fn != None:

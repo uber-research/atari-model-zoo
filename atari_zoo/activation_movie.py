@@ -87,19 +87,7 @@ def make_clips_from_activations(m,_frames,obs,activations_tensor,session,X_t,fps
     
     return clip_dict
 
-def _MakeActivationVideoOneLayer(m,clip_dict,layer_no):
-    labels = ["conv1","conv2","conv3","fc","output"]
-    scales = [1.5,2.0,2.0,0.5,1.5]
-
-    #get game frames
-    clip1 = clip_dict['frames']
-
-    #get activations from one layer
-    layer_name = m.layers[layer_no]['name']
-    clip2 = clip_dict[layer_name]
-    clip2_scale = scales[layer_no]
-    clip2 = clip2.resize(clip2_scale)
-
+def side_by_side_clips(clip1,clip2):
     #calculate size of background canvas
     total_size_x = clip1.size[0] + clip2.size[0]
     total_size_y = max(clip1.size[1],clip2.size[1])
@@ -117,9 +105,22 @@ def _MakeActivationVideoOneLayer(m,clip_dict,layer_no):
 
     #composite together
     cc = mpy.CompositeVideoClip(clip_list,(total_size_x,total_size_y)).subclip(0,duration)
-    #cc.ipython_display()
-    return cc 
+    return cc
+    
 
+def _MakeActivationVideoOneLayer(m,clip_dict,layer_no):
+    labels = ["conv1","conv2","conv3","fc","output"]
+    scales = [1.5,2.0,2.0,0.5,1.5]
+
+    #get game frames
+    clip1 = clip_dict['frames']
+
+    #get activations from one layer
+    layer_name = m.layers[layer_no]['name']
+    clip2 = clip_dict[layer_name]
+    clip2_scale = scales[layer_no]
+    clip2 = clip2.resize(clip2_scale)
+    return side_by_side_clips(clip1,clip2)
 
 
 def _MakeActivationVideo(m,clip_dict):
@@ -169,6 +170,10 @@ def _MakeActivationVideo(m,clip_dict):
     #cc.ipython_display()
     return cc 
 
+"""
+Take a model and create a dictionary of MoviePy clips
+for all the activations of the NN given a cached evaluation.
+"""
 def MakeClipDict(m):
     tf.reset_default_graph()
 
@@ -191,23 +196,31 @@ def MakeClipDict(m):
 
     return clip_dict
 
+"""
+Take a model and a layer number (0=conv1,1=conv2,2=conv3) and
+generate a side-by-side video of agent and activations on that
+layer.
+"""
 def MakeActivationVideoOneLayer(m,layer_no,out_file=None):
     clip_dict = MakeClipDict(m)
     clip = _MakeActivationVideoOneLayer(m,clip_dict,layer_no)
 
     if out_file!=None:
-        cc.write_videofile(out_file)
+        clip.write_videofile(out_file)
 
     return clip
     
 
 
-def MakeActivationVideo(m,out_file=None):
+"""
+Take a model m and generate a side-by-side video of agent and activations 
+"""
+def MakeActivationVideo(m,video_fn=None):
     clip_dict = MakeClipDict(m)
     clip = _MakeActivationVideo(m,clip_dict)
 
-    if out_file!=None:
-        cc.write_videofile(out_file)
+    if video_fn!=None:
+        clip.write_videofile(video_fn)
 
     return clip
 
