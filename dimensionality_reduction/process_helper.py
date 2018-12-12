@@ -15,6 +15,30 @@
 from collections import OrderedDict
 import numpy as np
 from sklearn import decomposition, manifold
+import atari_zoo
+from atari_zoo import MakeAtariModel
+import urllib.request
+import os
+
+def download_data(data):
+    print("downloading data ...")
+    env = data['game']
+    tag = "final"
+
+    algos_data = OrderedDict(data['algos'])
+    for algo in algos_data.keys():
+        for exp_idx in algos_data[algo]:
+            print(algo, exp_idx)
+            m = MakeAtariModel(algo,env,exp_idx,tag)()
+
+            path_to_npz = data['path'] + '/' + algo + '/' + data['game'] + '/'
+
+            filename = 'model' + str(exp_idx) + '_final_rollout.' + 'npz'
+
+            if not os.path.exists(path_to_npz):
+                os.makedirs(path_to_npz)
+
+            urllib.request.urlretrieve (m.data_path, path_to_npz+filename)
 
 def assemble_data(data, ext=".", dict_key='ram'):
     """Assemble hi-D BCs from all generations"""
@@ -36,7 +60,7 @@ def assemble_data(data, ext=".", dict_key='ram'):
             try:
                 npz_data = np.load(path_to_npz)
             except:
-                raise IOError("Invalid path: {}".format(path_to_npz))
+                raise IOError("Invalid path: {}. \n If you want to re-download the data, please add --download".format(path_to_npz))
 
             if algo not in raw_data.keys():
                 raw_data[algo] = {}

@@ -15,12 +15,13 @@
 import click
 import json
 import numpy as np
-from process_helper import assemble_data, reduce_dim, disassemble
+from process_helper import assemble_data, reduce_dim, disassemble, download_data
 
 
 @click.command()
 @click.argument('path_to_config', nargs=1)
-def main(path_to_config):
+@click.option('--download', is_flag=True)
+def main(path_to_config, download):
     """
     PATH_TO_CONFIG: Path to config.json
     """
@@ -32,6 +33,9 @@ def main(path_to_config):
     print(config['data'])
     print(config['method'])
     print(config['data']['key'])
+
+    if download:
+        download_data(config['data'])
 
     Xs, npz_files, npz_dims, _, _, _ = assemble_data(config['data'], dict_key=config['data']['key'])
 
