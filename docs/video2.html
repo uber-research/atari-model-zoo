@@ -18,6 +18,7 @@ function getJsonFromUrl(url) {
   if(!url) url = location.href;
   var query = url.substr(1);
   var question = location.href.indexOf("?");
+  if (question==-1) { return {} }
   var query = location.href.substr(question+1);
   var hash = query.indexOf("#");
   if(hash>-1) query = query.substr(0,hash);
@@ -46,10 +47,10 @@ function getUrlFromJson(data) {
 
 	var cutoff = location.href.indexOf("?");
 	var pre = location.href;
+
 	if (cutoff!=-1) {
 		pre = location.href.substr(0,cutoff);
 	}
-
 
 	url = Object.keys(data).map(function(k) {
 	    return encodeURIComponent(k) + '=' + encodeURIComponent(data[k])
@@ -70,7 +71,7 @@ var state2      = null;
 var vid = null;
 
 var update_video_source = function() {
-video_source = `https://dgqeqexrlnkvd.cloudfront.net/zoo/activation_movies/${algo}-${game}NoFrameskip-v4-${run}-${tag}.mp4`
+video_source = `https://dgqeqexrlnkvd.cloudfront.net/zoo/activation_movies/${algo}-${game}NoFrameskip-v4-${run}-${tag}.mp4`;
 //video_source = `../${algo}-${game}NoFrameskip-v4-${run}-${tag}.mp4`
 vid = document.getElementById("atarivideo");
 vid.src=video_source;
@@ -266,7 +267,6 @@ update_video_source();
                     state.w = mouseXY[0] - state.x;
                     state.h = mouseXY[1] - state.y;
 
-		    vars.state = JSON.stringify(state);
                 }
 
                 if (selection_toggle && state2 && mousedown) {
@@ -276,7 +276,6 @@ update_video_source();
                     state2.w = mouseXY[0] - state2.x;
                     state2.h = mouseXY[1] - state2.y;
 
-		    vars.state2 = JSON.stringify(state2);
                 }
 
             }
@@ -284,6 +283,18 @@ update_video_source();
 
 
     	    document.getElementById("urlCopyButton").onclick = function(e) {
+
+		if(state)
+		vars.state = JSON.stringify(state);
+		if(state2)
+		vars.state2 = JSON.stringify(state2);
+
+
+		vars.game = game;
+		vars.algo = algo;
+		vars.run = run;
+		vars.tag = tag;
+		
 		url = getUrlFromJson(vars);
 		document.getElementById("urlText").value = url;
 	    }
@@ -403,7 +414,7 @@ update_video_source();
 
     </script>
 
-<title>An example of HTML5 video zoom | RGraph</title>
+<title>Atari Zoo Neural Activity Visualizer</title>
 
 
 
