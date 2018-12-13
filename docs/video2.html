@@ -1,0 +1,543 @@
+<!DOCTYPE html >
+<html>
+<head>
+
+    <style>
+        canvas
+        {
+            border: 1px solid gray;
+        }
+    </style>
+
+<script>
+/**
+Code for loading vars from url
+*/
+
+function getJsonFromUrl(url) {
+  if(!url) url = location.href;
+  var query = url.substr(1);
+  var question = location.href.indexOf("?");
+  var query = location.href.substr(question+1);
+  var hash = query.indexOf("#");
+  if(hash>-1) query = query.substr(0,hash);
+  var result = {};
+  query.split("&").forEach(function(part) {
+    if(!part) return;
+    part = part.split("+").join(" "); // replace every + with space, regexp-free version
+    var eq = part.indexOf("=");
+    var key = eq>-1 ? part.substr(0,eq) : part;
+    var val = eq>-1 ? decodeURIComponent(part.substr(eq+1)) : "";
+    var from = key.indexOf("[");
+    if(from==-1) result[decodeURIComponent(key)] = val;
+    else {
+      var to = key.indexOf("]",from);
+      var index = decodeURIComponent(key.substring(from+1,to));
+      key = decodeURIComponent(key.substring(0,from));
+      if(!result[key]) result[key] = [];
+      if(!index) result[key].push(val);
+      else result[key][index] = val;
+    }
+  });
+  return result;
+}
+
+function getUrlFromJson(data) {
+
+	var cutoff = location.href.indexOf("?");
+	var pre = location.href;
+	if (cutoff!=-1) {
+		pre = location.href.substr(0,cutoff);
+	}
+
+
+	url = Object.keys(data).map(function(k) {
+	    return encodeURIComponent(k) + '=' + encodeURIComponent(data[k])
+	}).join('&');
+
+	return pre+"?"+url;
+}
+
+var vars = getJsonFromUrl();
+var url = getUrlFromJson(vars);
+var tag = "final";
+var algo = "apex";
+var game = "Seaquest";
+var run = 1;
+var video_source = null; 
+var state      = null;
+var state2      = null;
+var vid = null;
+
+var update_video_source = function() {
+video_source = `https://dgqeqexrlnkvd.cloudfront.net/zoo/activation_movies/${algo}-${game}NoFrameskip-v4-${run}-${tag}.mp4`
+//video_source = `../${algo}-${game}NoFrameskip-v4-${run}-${tag}.mp4`
+vid = document.getElementById("atarivideo");
+vid.src=video_source;
+vid.playbackRate = 0.5;
+
+}
+
+var form_update = function() {
+
+game = document.getElementById('game').value;
+algo = document.getElementById('algo').value;
+run = document.getElementById('run').value;
+tag = document.getElementById('tag').value;
+
+update_video_source();
+}
+
+
+</script>
+
+    <script>
+        /**
+        * The window.onload function contains all of the code necessary
+        */
+        window.onload = function (e)
+        {
+            /**
+            * Some common variables
+            */
+            var canvas     = document.getElementById("cvs");
+            var context    = canvas.getContext('2d');
+
+            var canvas2    = document.getElementById("cvs2");
+            var context2   = canvas2.getContext('2d');
+
+            var canvas3    = document.getElementById("cvs3");
+            var context3   = canvas3.getContext('2d');
+
+            var video      = document.getElementById("atarivideo");
+
+	    vid = document.getElementById("atarivideo");
+
+            var translated = true;
+            var mousedown  = false;
+	    var selection_toggle = false;
+            
+            
+            /**
+            * Translate for antialiasing purpose
+            */
+            if (!translated) {
+                context.translate(0.5,0.5);
+                translated = true;
+            }
+
+
+
+
+
+            /**
+            * The main draw function that renders each frame
+            */
+            function Draw()
+            {
+                /**
+                * Start by clearing both canvas tags
+                */
+                context.clearRect(0,0,canvas.width,canvas.height);
+                context2.clearRect(0,0,canvas2.width,canvas2.height);
+                context3.clearRect(0,0,canvas3.width,canvas3.height);
+
+                /**
+                * Draw the "Loading..." placeholder. This is overwritten once the video has loaded
+                */
+                RGraph.Text2(context, {'font':'Arial',
+                                       'size':24,
+                                       'x':15,
+                                       'y':36,
+                                       'text':'Loading...'});
+
+
+
+
+
+                /**
+                * Draw the video on the first canvas
+                */
+                context.drawImage(video,0,0);
+
+
+
+                /**
+                * Draw the selection on to the second canvas
+                */
+                if (state && state.x && state.y && state.w && state.h) {
+                    context2.drawImage(canvas,state.x,state.y,state.w,state.h,
+                                              0,0,canvas2.width, canvas2.height);
+                }
+
+
+                /**
+                * Draw the selection on to the third canvas
+                */
+                if (state2 && state2.x && state2.y && state2.w && state2.h) {
+                    context3.drawImage(canvas,state2.x,state2.y,state2.w,state2.h,
+                                              0,0,canvas3.width, canvas3.height);
+                }
+
+
+                /**
+                * Draw the selection box if necessary
+                */
+                if (state) {
+                    if (context.setLineDash) context.setLineDash([3,3]);
+                    context.lineWidth = 2;
+                    context.strokeStyle = 'red'
+                    context.strokeRect(state.x, state.y, state.w, state.h);
+                    if (context.setLineDash) context.setLineDash([1]);
+                }
+
+                /**
+                * Draw the selection box if necessary
+                */
+                if (state2) {
+                    if (context.setLineDash) context.setLineDash([3,3]);
+                    context.lineWidth = 2;
+                    context.strokeStyle = 'green'
+                    context.strokeRect(state2.x, state2.y, state2.w, state2.h);
+                    if (context.setLineDash) context.setLineDash([1]);
+                }
+
+                setTimeout(Draw, 1000 / 60);
+            }
+
+
+
+
+
+
+
+
+            /**
+            * The mousedown event initiates the selection process
+            */
+            canvas.onmousedown = function (e)
+            {
+                var mouseXY = RGraph.getMouseXY(e);
+               
+	        if (!selection_toggle) {	
+                state = {x: mouseXY[0], y:mouseXY[1]};
+		}
+		else {
+		state2 = {x: mouseXY[0], y:mouseXY[1]};
+		}
+                mousedown = true;
+            }
+            
+            
+            
+            /**
+            * The mouseup event finishes the selection for zoom
+            */
+            //window.onmouseup =
+            canvas.onmouseup = function (e)
+            {
+		var _toggle = Boolean(selection_toggle);
+
+                if ((!_toggle) && state) {
+		    selection_toggle = true;
+                }
+
+
+		if (_toggle && state2) {
+		    selection_toggle = false;
+		}
+
+                mousedown = false;
+            }
+
+
+
+            
+            
+            /**
+            * The mousemove event updates the selection for zoom
+            */
+            canvas.onmousemove = function (e)
+            {
+                if (!selection_toggle && state && mousedown) {
+                    
+                    var mouseXY = RGraph.getMouseXY(e);
+
+                    state.w = mouseXY[0] - state.x;
+                    state.h = mouseXY[1] - state.y;
+
+		    vars.state = JSON.stringify(state);
+                }
+
+                if (selection_toggle && state2 && mousedown) {
+                    
+                    var mouseXY = RGraph.getMouseXY(e);
+
+                    state2.w = mouseXY[0] - state2.x;
+                    state2.h = mouseXY[1] - state2.y;
+
+		    vars.state2 = JSON.stringify(state2);
+                }
+
+            }
+
+
+
+    	    document.getElementById("urlCopyButton").onclick = function(e) {
+		url = getUrlFromJson(vars);
+		document.getElementById("urlText").value = url;
+	    }
+
+            document.getElementById("resetButton").onclick = function (e)
+            {
+		vid.currentTime = 0.0;
+            }
+
+            /**
+            * This handles when the play button is pressed
+            */
+            document.getElementById("playButton").onclick = function (e)
+            {
+		vid.playbackRate = 0.5;
+                video.play();
+            }
+
+            document.getElementById("slowButton").onclick = function (e)
+            {
+		vid.playbackRate = 0.1;
+                video.play();
+            }
+
+
+            document.getElementById("framePlus").onclick = function (e)
+            {
+		vid.currentTime += 1.0/30.0;
+		vid.pause();
+            }
+
+
+            document.getElementById("frameMinus").onclick = function (e)
+            {
+		vid.currentTime -= 1.0/30.0;
+		vid.pause();
+            }
+
+            document.getElementById("conv1").onclick = function (e)
+            {
+		    state = {'h':216,'w':166,'x':47,'y':576};
+		    state2 = {'h':168,'w':265,'x':217,'y':126};
+            }
+
+            document.getElementById("conv2").onclick = function (e)
+            {
+		    state = {'h':216,'w':166,'x':47,'y':576};
+		    state2 = {'h':218,'w':194,'x':254,'y':319};
+            }
+
+            document.getElementById("conv3").onclick = function (e)
+            {
+		    state = {'h':216,'w':166,'x':47,'y':576};
+		    state2 = {'h':215,'w':197,'x':251,'y':567};
+            }
+
+            document.getElementById("fc").onclick = function (e)
+            {
+		    state = {'h':216,'w':166,'x':47,'y':576};
+		    state2 = {'h':108,'w':156,'x':272,'y':804};
+            }
+
+            document.getElementById("toggleDrag").onclick = function (e)
+            {
+		if (vid.style.display=="inline")
+			vid.style.display="none";
+		else
+			vid.style.display="inline";
+            }
+
+            /**
+            * This handles when the stop button is pressed
+            */
+            document.getElementById("stopButton").onclick = function (e)
+            {
+                video.pause();
+            }
+
+
+            /**
+            * Call the Draw function at a frame rate of 60fps
+            */
+            setTimeout(Draw, 1000 / 60);
+
+
+if(vars.game) { 
+	game=vars.game;
+	document.getElementById('game').value=game;
+}
+
+if(vars.algo) {
+	algo=vars.algo;
+	document.getElementById('algo').value=algo;
+}
+if(vars.run_id) {
+	run_id=vars.run_id;
+	document.getElementById('run').value=run_id;
+}
+
+if(vars.tag) {
+	tag=vars.tag;
+	document.getElementById('tag').value=tag;
+}
+
+if(vars.state) {
+state = JSON.parse(vars.state);
+}
+
+if(vars.state2) {
+state2 = JSON.parse(vars.state2);
+}
+
+update_video_source();
+
+}
+
+
+    </script>
+
+<title>An example of HTML5 video zoom | RGraph</title>
+
+
+
+
+
+<!-- Keep these here - causes page to shift layout if placed further down -->
+    <script
+  src="https://code.jquery.com/jquery-3.3.1.min.js"
+    integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+      crossorigin="anonymous"></script>
+    <script src="./RGraph/libraries/RGraph.common.core.js"></script><!-- DO NOT DEFER -->
+
+</head>
+<body  >
+
+    <video id="atarivideo" !autoplay controls loop style="width: 200px; display: none">
+    </video>
+   
+    <table><tr><td>	
+			    <canvas id="cvs" width="550" height="1000" style="cursor: crosshair;">[No canvas support]</canvas></td>
+    <td>
+	    <canvas id="cvs2" width="500" height="500">[No canvas support]</canvas></td>
+    <td><canvas id="cvs3" width="500" height="500">[No canvas support]</canvas>
+    </td>
+
+    <br clear="all" />
+    
+    <button id="resetButton">Reset</button>
+    <button id="stopButton">Stop</button>
+    <button id="slowButton">SlowMo</button>
+    <button id="playButton">Play</button><br/>
+    <button id="framePlus">FramePlus</button>
+    <button id="frameMinus">FrameMinus</button><br/>
+    <button id="toggleDrag">ToggleDrag</button>
+    <br/>
+    <button id="conv1">Conv1</button>
+    <button id="conv2">Conv2</button>
+    <button id="conv3">Conv3</button>
+    <button id="fc">FC</button>
+    <br/>
+    <button id="urlCopyButton">BookmarkURL</button>
+    <textarea id="urlText" rows="2" cols="80">
+    </textarea>
+
+    <br clear="all" />
+
+
+
+		<select id="algo" onchange="form_update();">
+			  <option value="apex">Ape-X</option>
+			  <option value="a2c">A2C</option>
+			    <option value="dqn">DQN</option>
+			      <option value="es">ES</option>
+			      <option value="ga">GA</option>
+			        <option value="rainbow">Rainbow</option>
+		</select>
+
+		<select id="run" onchange="form_update();">
+			  <option value="1">Run 1</option>
+			  <option value="2">Run 2</option>
+			    <option value="3">Run 3</option>
+		</select>
+
+		<select id="game" onchange="form_update();">
+			<option value="Alien">Alien</option>
+			<option value="Amidar">Amidar</option>
+			<option value="Assault">Assault</option>
+			<option value="Asterix">Asterix</option>
+			<option value="Asteroids">Asteroids</option>
+			<option value="Atlantis">Atlantis</option>
+			<option value="BankHeist">BankHeist</option>
+			<option value="BattleZone">BattleZone</option>
+			<option value="BeamRider">BeamRider</option>
+			<option value="Berzerk">Berzerk</option>
+			<option value="Bowling">Bowling</option>
+			<option value="Boxing">Boxing</option>
+			<option value="Breakout">Breakout</option>
+			<option value="Centipede">Centipede</option>
+			<option value="ChopperCommand">ChopperCommand</option>
+			<option value="CrazyClimber">CrazyClimber</option>
+			<option value="DemonAttack">DemonAttack</option>
+			<option value="DoubleDunk">DoubleDunk</option>
+			<option value="Enduro">Enduro</option>
+			<option value="FishingDerby">FishingDerby</option>
+			<option value="Freeway">Freeway</option>
+			<option value="Frostbite">Frostbite</option>
+			<option value="Gopher">Gopher</option>
+			<option value="Gravitar">Gravitar</option>
+			<option value="Hero">Hero</option>
+			<option value="IceHockey">IceHockey</option>
+			<option value="Jamesbond">Jamesbond</option>
+			<option value="Kangaroo">Kangaroo</option>
+			<option value="Krull">Krull</option>
+			<option value="KungFuMaster">KungFuMaster</option>
+			<option value="MontezumaRevenge">MontezumaRevenge</option>
+			<option value="MsPacman">MsPacman</option>
+			<option value="NameThisGame">NameThisGame</option>
+			<option value="Phoenix">Phoenix</option>
+			<option value="Pitfall">Pitfall</option>
+			<option value="Pong">Pong</option>
+			<option value="PrivateEye">PrivateEye</option>
+			<option value="Qbert">Qbert</option>
+			<option value="Riverraid">Riverraid</option>
+			<option value="RoadRunner">RoadRunner</option>
+			<option value="Robotank">Robotank</option>
+			<option value="Seaquest">Seaquest</option>
+			<option value="Skiing">Skiing</option>
+			<option value="Solaris">Solaris</option>
+			<option value="SpaceInvaders">SpaceInvaders</option>
+			<option value="StarGunner">StarGunner</option>
+			<option value="Tennis">Tennis</option>
+			<option value="TimePilot">TimePilot</option>
+			<option value="Tutankham">Tutankham</option>
+			<option value="UpNDown">UpNDown</option>
+			<option value="Venture">Venture</option>
+			<option value="VideoPinball">VideoPinball</option>
+			<option value="WizardOfWor">WizardOfWor</option>
+			<option value="YarsRevenge">YarsRevenge</option>
+			<option value="Zaxxon">Zaxxon</option>
+		</select>
+
+		<select id="tag" onchange="form_update();">
+			<option value="final">Final</option>
+			<option value="400M">400M Frames</option>
+			<option value="1B">1B Frames</option>
+			<option value="1HR">1 hour</option>
+			<option value="2HR">2 hours</option>
+			<option value="4HR">4 hours</option>
+			<option value="6HR">6 hours</option>
+			<option value="10HR">10 hours</option>
+			<option value="initial">Initial</option>
+		</select>
+
+		</center>
+
+</body>
+</html>
