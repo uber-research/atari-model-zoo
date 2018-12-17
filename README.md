@@ -4,6 +4,8 @@ The aim of this project is to disseminate deep reinforcement learning agents tra
 research into understanding reinforcement learning agents. 
 This project makes use of the excellent [Lucid](https://github.com/tensorflow/lucid) neural network visualization library, and integrates with the [Dopamine](https://github.com/google/dopamine) [model release](https://github.com/google/dopamine/tree/master/docs#downloads).
 
+A paper introducing this work was published at the Deep RL workshop at NeurIPS 2018: [An Atari Model Zoo for Analyzing, Visualizing, and Comparing Deep Reinforcement Learning Agents](https://drive.google.com/open?id=0B_utB5Y8Y6D5OHdCbjFuYmtrZnBLVGkwZEdocU5YRVVLOFFZ).
+
 ## About
 
 This software package is accompanied by a binary release of (1) frozen models trained on Atari games by a variety of deep reinforcement learning methods, and (2) cached gameplay experience of those agents in their
@@ -56,4 +58,38 @@ From the command line you can run: ```python -m atari_zoo.activation_movie --alg
 
 ## Notebooks
 
-Example jupyter notebooks also live in this directory that give further examples of how this library can be used. 
+Example jupyter notebooks live in the notebook directory that give further examples of how this library can be used.
+
+## Web tools
+
+* A tool for viewing videos of trained agents is available [here](https://uber-research.github.io/atari-model-zoo/video.html); note that it is possible to link to specific videos,
+e.g. [https://uber-research.github.io/atari-model-zoo/video.html?algo=apex&game=Seaquest&tag=final&run=2](https://uber-research.github.io/atari-model-zoo/video.html?algo=apex&game=Seaquest&tag=final&run=2).
+
+* A tool for viewing videos of trained agents alongside their neural activations is available [here](https://uber-research.github.io/atari-model-zoo/video2.html).
+
+## Source code for training algorithms that produced zoo models
+
+We trained four algorithms ourselves:
+
+* [A2C](https://arxiv.org/abs/1602.01783) - we used the [baselines package from OpenAI](https://github.com/openai/baselines)
+* [GA](https://arxiv.org/abs/1712.06567) - we used the [fast GPU implementation version released by Uber](https://github.com/uber-research/deep-neuroevolution)
+* [ES](https://arxiv.org/abs/1703.03864) - we used the [fast GPU version released by Uber](https://github.com/uber-research/deep-neuroevolution)
+* [Ape-X](https://arxiv.org/abs/1803.00933) - we used the [replication released by Uber](https://github.com/uber-research/ape-x)
+
+We took trained final models from two algorithms (DQN and Rainbow) from the [Dopamine model release](https://ai.googleblog.com/2018/08/introducing-new-framework-for-flexible.html):
+
+* [DQN](https://arxiv.org/abs/1312.5602) - [implementation here](https://github.com/google/dopamine)
+* [Rainbow](https://arxiv.org/abs/1710.02298) - [implementation here](https://github.com/google/dopamine)
+
+## Citation
+
+To cite this work in publications, please use the following BibTex entry:
+
+```
+@inproceedings{
+title = {An Atari Model Zoo for Analyzing, Visualizing, and Comparing Deep Reinforcement Learning Agents},
+author = {Felipe Such, Vashish Madhavan, Rosanne Liu, Rui Wang, Pablo Castro, Yulun Li, Ludwig Schubert, Marc Bellemare, Jeff Clune, Joel Lehman},
+booktitle = {Proceedings of the Deep RL Workshop at NeurIPS 2018},
+year = {2018},
+}
+```
