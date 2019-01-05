@@ -60,6 +60,8 @@ From the command line you can run: ```python -m atari_zoo.activation_movie --alg
 
 Example jupyter notebooks live in the notebook directory that give further examples of how this library can be used.
 
+A [starter colab notebook](https://colab.research.google.com/github/uber-research/atari-model-zoo/blob/master/colab/AtariZooColabDemo.ipynb) enables you to check out the library without downloading and installing it.
+
 ## Web tools
 
 * A tool for viewing videos of trained agents is available [here](https://uber-research.github.io/atari-model-zoo/video.html); note that it is possible to link to specific videos,
