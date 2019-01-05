@@ -66,8 +66,8 @@ var algo = "apex";
 var game = "Seaquest";
 var run = 1;
 var video_source = null; 
-var state      = null;
-var state2      = null;
+var state = {'h':216,'w':166,'x':47,'y':576};
+var state2 = {'h':215,'w':197,'x':251,'y':567};
 var vid = null;
 
 var update_video_source = function() {
@@ -357,6 +357,15 @@ update_video_source();
 		    state2 = {'h':108,'w':156,'x':272,'y':804};
             }
 
+
+            document.getElementById("toggleActivation").onclick = function (e)
+            {
+		if (cvs.style.display=="inline")
+			cvs.style.display="none";
+		else
+			cvs.style.display="inline";
+            }
+
             document.getElementById("toggleDrag").onclick = function (e)
             {
 		if (vid.style.display=="inline")
@@ -432,37 +441,15 @@ update_video_source();
 
     <video id="atarivideo" !autoplay controls loop style="width: 200px; display: none">
     </video>
-   
-    <table><tr><td>	
-			    <canvas id="cvs" width="550" height="1000" style="cursor: crosshair;">[No canvas support]</canvas></td>
-    <td>
-	    <canvas id="cvs2" width="500" height="500">[No canvas support]</canvas></td>
-    <td><canvas id="cvs3" width="500" height="500">[No canvas support]</canvas>
-    </td>
-
-    <br clear="all" />
-    
-    <button id="resetButton">Reset</button>
-    <button id="stopButton">Stop</button>
-    <button id="slowButton">SlowMo</button>
-    <button id="playButton">Play</button><br/>
-    <button id="framePlus">FramePlus</button>
-    <button id="frameMinus">FrameMinus</button><br/>
-    <button id="toggleDrag">ToggleDrag</button>
-    <br/>
+  
+	<b>Activations to view:</b>	<br/>
     <button id="conv1">Conv1</button>
     <button id="conv2">Conv2</button>
     <button id="conv3">Conv3</button>
     <button id="fc">FC</button>
     <br/>
-    <button id="urlCopyButton">BookmarkURL</button>
-    <textarea id="urlText" rows="2" cols="80">
-    </textarea>
-
-    <br clear="all" />
-
-
-
+    
+    <b>Select model to visualize:</b> <br/>
 		<select id="algo" onchange="form_update();">
 			  <option value="apex">Ape-X</option>
 			  <option value="a2c">A2C</option>
@@ -549,6 +536,35 @@ update_video_source();
 		</select>
 
 		</center>
+    <table><tr><td>	
+			    <canvas id="cvs" width="550" height="1000" style="cursor: crosshair; display: none">[No canvas support]</canvas></td>
+    <td>
+	    <canvas id="cvs2" width="500" height="500">[No canvas support]</canvas></td>
+    <td><canvas id="cvs3" width="500" height="500">[No canvas support]</canvas>
+    </td>
+	    </tr>
+    </table>
+
+    <b>Playback controls:</b><br/> 
+    <button id="resetButton">Rewind</button>
+    <button id="stopButton">Stop</button>
+    <button id="playButton">Play</button><br/>
+    <button id="slowButton">SlowMo</button>
+    <button id="framePlus">FramePlus</button>
+    <button id="frameMinus">FrameMinus</button><br/>
+    <br clear="all" />
+
+    <b>Advanced features:</b><br/>
+    <button id="toggleDrag">Toggle Draggable Timeline</button>
+    <button id="toggleActivation">Toggle Full Activation View</button>
+    <br/>
+    <button id="urlCopyButton">BookmarkURL</button>
+    <textarea id="urlText" rows="2" cols="80">
+    </textarea>
+
+    <br clear="all" />
+
+
 
 		<br/>Note this webapp borrows from <a href="https://www.rgraph.net/blog/an-example-of-html5-canvas-video-zoom.html">this very helpful demo</a>.<br/>
 </body>
