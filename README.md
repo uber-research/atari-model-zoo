@@ -93,3 +93,7 @@ booktitle = {Proceedings of the Deep RL Workshop at NeurIPS 2018},
 year = {2018},
 }
 ```
+
+## Contact Information
+
+For questions, comments, and suggestions, email [joel.lehman@uber.com](mailto:mailto:joel.lehman@uber.com).
