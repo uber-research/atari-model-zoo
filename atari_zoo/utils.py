@@ -100,6 +100,7 @@ def visualize_conv_w(w,title=None,subsample=None):
     pylab.imshow(canvas)
     if title:
         pylab.title(title,fontsize=20)
+    return canvas
 
 #save model out to onnx format
 def to_onnx(model,fname="./frozen_out.onnx",scope=""):
