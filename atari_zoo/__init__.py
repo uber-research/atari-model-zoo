@@ -13,7 +13,7 @@
 #     limitations under the License.
 
 
-run_cnt = {'apex':5,'ga':5,'es':3,'a2c':3,'rainbow':5,'dqn':5}
+run_cnt = {'apex':3,'ga':3,'es':3,'a2c':3,'rainbow':5,'dqn':5,'impala':3}
 
 analysis_subset_games = ['AmidarNoFrameskip-v4', 'AssaultNoFrameskip-v4', 'AsterixNoFrameskip-v4', 'AsteroidsNoFrameskip-v4', 'AtlantisNoFrameskip-v4','EnduroNoFrameskip-v4', 'FrostbiteNoFrameskip-v4', 'GravitarNoFrameskip-v4', 'KangarooNoFrameskip-v4',"SeaquestNoFrameskip-v4",'SkiingNoFrameskip-v4','VentureNoFrameskip-v4','ZaxxonNoFrameskip-v4']
 

@@ -23,7 +23,8 @@ datadir_remote_dict = {'apex':"https://dgqeqexrlnkvd.cloudfront.net/zoo/apex",
                          'ga':"https://dgqeqexrlnkvd.cloudfront.net/zoo/ga",
                          'a2c':"https://dgqeqexrlnkvd.cloudfront.net/zoo/a2c",
                          'rainbow':"https://dgqeqexrlnkvd.cloudfront.net/zoo/rainbow",
-                       'dqn':"https://dgqeqexrlnkvd.cloudfront.net/zoo/dqn"}
+                       'dqn':"https://dgqeqexrlnkvd.cloudfront.net/zoo/dqn",
+                       'impala':"https://dgqeqexrlnkvd.cloudfront.net/zoo/impala"}
 
 url_formatter_dict = {('rainbow','remote'):dopamine_url_formatter,('dqn','remote'):dopamine_url_formatter}
 
@@ -34,6 +35,7 @@ datadir_local_dict = {'apex':"/space/rlzoo/apex",
                         'ga':"/space/rlzoo/ga",
                         'a2c':'/space/rlzoo/a2c',
                         'rainbow':'/space/rlzoo/rainbow',
-                        'dqn':'/space/rlzoo/dqn'}
+                        'dqn':'/space/rlzoo/dqn',
+                      'impala':'/space/rlzoo/impala' }
 
 debug = True
