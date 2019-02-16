@@ -1,6 +1,13 @@
 <!DOCTYPE html> 
 <html> 
 	<head>
+
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="css/bootstrap.min.css">
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="js/jquery-3.3.1.min.js"></script>
+<script src="js/bootstrap.min.js" ></script>
 <script>
 function getJsonFromUrl(url) {
   if(!url) url = location.href;
@@ -33,7 +40,7 @@ function getJsonFromUrl(url) {
 var vars = getJsonFromUrl();
 var tag = "final";
 var algo = "apex";
-var game = "Seaquest";
+var game = "Alien";
 var run_id = 1;
 var video_source = null; 
 
@@ -77,102 +84,122 @@ update_video_source();
 }
 
 </script>
-
-
-	</head>
-	<body> 
-		<center>
-		<video width="400"  id="atarivideo" controls autoplay>
-			      Your browser does not support HTML5 video.
-		</video><br/>
-
-		<select id="algo" onchange="form_update();">
-			  <option value="apex">Ape-X</option>
-			  <option value="a2c">A2C</option>
-			    <option value="dqn">DQN</option>
-			      <option value="es">ES</option>
-			      <option value="ga">GA</option>
-			        <option value="rainbow">Rainbow</option>
-		</select>
-
-		<select id="run" onchange="form_update();">
-			  <option value="1">Run 1</option>
-			  <option value="2">Run 2</option>
-			    <option value="3">Run 3</option>
-		</select>
-
-		<select id="game" onchange="form_update();">
-			<option value="Alien">Alien</option>
-			<option value="Amidar">Amidar</option>
-			<option value="Assault">Assault</option>
-			<option value="Asterix">Asterix</option>
-			<option value="Asteroids">Asteroids</option>
-			<option value="Atlantis">Atlantis</option>
-			<option value="BankHeist">BankHeist</option>
-			<option value="BattleZone">BattleZone</option>
-			<option value="BeamRider">BeamRider</option>
-			<option value="Berzerk">Berzerk</option>
-			<option value="Bowling">Bowling</option>
-			<option value="Boxing">Boxing</option>
-			<option value="Breakout">Breakout</option>
-			<option value="Centipede">Centipede</option>
-			<option value="ChopperCommand">ChopperCommand</option>
-			<option value="CrazyClimber">CrazyClimber</option>
-			<option value="DemonAttack">DemonAttack</option>
-			<option value="DoubleDunk">DoubleDunk</option>
-			<option value="Enduro">Enduro</option>
-			<option value="FishingDerby">FishingDerby</option>
-			<option value="Freeway">Freeway</option>
-			<option value="Frostbite">Frostbite</option>
-			<option value="Gopher">Gopher</option>
-			<option value="Gravitar">Gravitar</option>
-			<option value="Hero">Hero</option>
-			<option value="IceHockey">IceHockey</option>
-			<option value="Jamesbond">Jamesbond</option>
-			<option value="Kangaroo">Kangaroo</option>
-			<option value="Krull">Krull</option>
-			<option value="KungFuMaster">KungFuMaster</option>
-			<option value="MontezumaRevenge">MontezumaRevenge</option>
-			<option value="MsPacman">MsPacman</option>
-			<option value="NameThisGame">NameThisGame</option>
-			<option value="Phoenix">Phoenix</option>
-			<option value="Pitfall">Pitfall</option>
-			<option value="Pong">Pong</option>
-			<option value="PrivateEye">PrivateEye</option>
-			<option value="Qbert">Qbert</option>
-			<option value="Riverraid">Riverraid</option>
-			<option value="RoadRunner">RoadRunner</option>
-			<option value="Robotank">Robotank</option>
-			<option value="Seaquest">Seaquest</option>
-			<option value="Skiing">Skiing</option>
-			<option value="Solaris">Solaris</option>
-			<option value="SpaceInvaders">SpaceInvaders</option>
-			<option value="StarGunner">StarGunner</option>
-			<option value="Tennis">Tennis</option>
-			<option value="TimePilot">TimePilot</option>
-			<option value="Tutankham">Tutankham</option>
-			<option value="UpNDown">UpNDown</option>
-			<option value="Venture">Venture</option>
-			<option value="VideoPinball">VideoPinball</option>
-			<option value="WizardOfWor">WizardOfWor</option>
-			<option value="YarsRevenge">YarsRevenge</option>
-			<option value="Zaxxon">Zaxxon</option>
-		</select>
-
-		<select id="tag" onchange="form_update();">
-			<option value="final">Final</option>
-			<option value="400M">400M Frames</option>
-			<option value="1B">1B Frames</option>
-			<option value="1HR">1 hour</option>
-			<option value="2HR">2 hours</option>
-			<option value="4HR">4 hours</option>
-			<option value="6HR">6 hours</option>
-			<option value="10HR">10 hours</option>
-			<option value="initial">Initial</option>
-		</select>
-
-		</center>
-
+<title>Atari Zoo Neural Activity Visualizer</title>
+</head>
+	<header>
+  <div class="navbar navbar-light shadow-sm" style="background-color: #7709cccf;">
+    <div class="container d-flex justify-content-between">
+      <a href="#" class="navbar-brand d-flex align-items-center" style='color: #f5f5f5;'>
+        <strong>Atari Zoo Video Viewer</strong>
+      </a>
+      </button>
+    </div>
+  </div>
+	</header>
+	<body>
+		<div class='container'>
+			<div class='row' style="margin: auto; max-width: 650px">
+				<video class="video-fluid z-depth-1" width="400" id="atarivideo" controls autoplay>
+					      Your browser does not support HTML5 video.
+				</video>
+			</div>
+		</div>
+		<br/>
+		<div class='container'>
+			<div class='row' style="margin: auto; max-width: 800px">
+				<div class="col-xs-2">
+					<select class='form-control input-lg' id="algo" onchange="form_update();">
+						  <option value="apex">Ape-X</option>
+						  <option value="a2c">A2C</option>
+						    <option value="dqn">DQN</option>
+						      <option value="es">ES</option>
+						      <option value="ga">GA</option>
+						        <option value="rainbow">Rainbow</option>
+					</select>
+				</div>
+				<div class='col-xs-2'>
+					<select class='form-control input-lg' id="run" onchange="form_update();">
+						  <option value="1">Run 1</option>
+						  <option value="2">Run 2</option>
+						    <option value="3">Run 3</option>
+					</select>
+				</div>
+				<div class='col-xs-2'> 
+					<select class='form-control input-lg' id="game" onchange="form_update();">
+						<option value="Alien">Alien</option>
+						<option value="Amidar">Amidar</option>
+						<option value="Assault">Assault</option>
+						<option value="Asterix">Asterix</option>
+						<option value="Asteroids">Asteroids</option>
+						<option value="Atlantis">Atlantis</option>
+						<option value="BankHeist">BankHeist</option>
+						<option value="BattleZone">BattleZone</option>
+						<option value="BeamRider">BeamRider</option>
+						<option value="Berzerk">Berzerk</option>
+						<option value="Bowling">Bowling</option>
+						<option value="Boxing">Boxing</option>
+						<option value="Breakout">Breakout</option>
+						<option value="Centipede">Centipede</option>
+						<option value="ChopperCommand">ChopperCommand</option>
+						<option value="CrazyClimber">CrazyClimber</option>
+						<option value="DemonAttack">DemonAttack</option>
+						<option value="DoubleDunk">DoubleDunk</option>
+						<option value="Enduro">Enduro</option>
+						<option value="FishingDerby">FishingDerby</option>
+						<option value="Freeway">Freeway</option>
+						<option value="Frostbite">Frostbite</option>
+						<option value="Gopher">Gopher</option>
+						<option value="Gravitar">Gravitar</option>
+						<option value="Hero">Hero</option>
+						<option value="IceHockey">IceHockey</option>
+						<option value="Jamesbond">Jamesbond</option>
+						<option value="Kangaroo">Kangaroo</option>
+						<option value="Krull">Krull</option>
+						<option value="KungFuMaster">KungFuMaster</option>
+						<option value="MontezumaRevenge">MontezumaRevenge</option>
+						<option value="MsPacman">MsPacman</option>
+						<option value="NameThisGame">NameThisGame</option>
+						<option value="Phoenix">Phoenix</option>
+						<option value="Pitfall">Pitfall</option>
+						<option value="Pong">Pong</option>
+						<option value="PrivateEye">PrivateEye</option>
+						<option value="Qbert">Qbert</option>
+						<option value="Riverraid">Riverraid</option>
+						<option value="RoadRunner">RoadRunner</option>
+						<option value="Robotank">Robotank</option>
+						<option value="Seaquest">Seaquest</option>
+						<option value="Skiing">Skiing</option>
+						<option value="Solaris">Solaris</option>
+						<option value="SpaceInvaders">SpaceInvaders</option>
+						<option value="StarGunner">StarGunner</option>
+						<option value="Tennis">Tennis</option>
+						<option value="TimePilot">TimePilot</option>
+						<option value="Tutankham">Tutankham</option>
+						<option value="UpNDown">UpNDown</option>
+						<option value="Venture">Venture</option>
+						<option value="VideoPinball">VideoPinball</option>
+						<option value="WizardOfWor">WizardOfWor</option>
+						<option value="YarsRevenge">YarsRevenge</option>
+						<option value="Zaxxon">Zaxxon</option>
+					</select>
+				</div>
+					
+				<div class='col-xs-2'> 
+					<select class='form-control input-lg' id="tag" onchange="form_update();">
+						<option value="final">Final</option>
+						<option value="400M">400M Frames</option>
+						<option value="1B">1B Frames</option>
+						<option value="1HR">1 hour</option>
+						<option value="2HR">2 hours</option>
+						<option value="4HR">4 hours</option>
+						<option value="6HR">6 hours</option>
+						<option value="10HR">10 hours</option>
+						<option value="initial">Initial</option>
+					</select>
+				</div>
+			</div>
+			</center>
+		</div>
 
 		<script>
 		</script>

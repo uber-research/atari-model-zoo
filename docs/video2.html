@@ -1,7 +1,12 @@
 <!DOCTYPE html >
 <html>
 <head>
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="css/bootstrap.min.css">
 
+<!-- Latest compiled and minified JavaScript -->
+<script src="js/jquery-3.3.1.min.js"></script>
+<script src="js/bootstrap.min.js" ></script>
     <style>
         canvas
         {
@@ -63,7 +68,7 @@ var vars = getJsonFromUrl();
 var url = getUrlFromJson(vars);
 var tag = "final";
 var algo = "apex";
-var game = "Seaquest";
+var game = "Alien";
 var run = 1;
 var video_source = null; 
 var state = {'h':216,'w':166,'x':47,'y':576};
@@ -430,142 +435,189 @@ update_video_source();
 
 
 <!-- Keep these here - causes page to shift layout if placed further down -->
-    <script
-  src="https://code.jquery.com/jquery-3.3.1.min.js"
-    integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
-      crossorigin="anonymous"></script>
     <script src="./RGraph/libraries/RGraph.common.core.js"></script><!-- DO NOT DEFER -->
 
 </head>
-<body  >
+<header>
+      <div class="navbar navbar-light shadow-sm" style="background-color: #6705b3b5;">
+        <div class="container d-flex justify-content-between">
+          <a href="#" class="navbar-brand d-flex align-items-center" style='color: #f5f5f5;'>
+            <strong>Atari Zoo Neural Activity Visualizer</strong>
+          </a>
+          </button>
+        </div>
+      </div>
+</header>
+<body>
 
-    <video id="atarivideo" !autoplay controls loop style="width: 200px; display: none">
-    </video>
+    
   
-	<b>Activations to view:</b>	<br/>
-    <button id="conv1">Conv1</button>
-    <button id="conv2">Conv2</button>
-    <button id="conv3">Conv3</button>
-    <button id="fc">FC</button>
+    <div class='container'>
+        <div class='row'>
+        	<h4>Activations to view</h4>
+            <button type="button" class="btn btn-primary btn-small" id="conv1">Conv1</button>
+            <button type="button" class="btn btn-success btn-small" id="conv2">Conv2</button>
+            <button type="button" class="btn btn-danger btn-small" id="conv3">Conv3</button>
+            <button type="button" class="btn btn-warning btn-small" id="fc">FC</button>
+        </div>
+    </div>
     <br/>
     
-    <b>Select model to visualize:</b> <br/>
-		<select id="algo" onchange="form_update();">
-			  <option value="apex">Ape-X</option>
-			  <option value="a2c">A2C</option>
-			    <option value="dqn">DQN</option>
-			      <option value="es">ES</option>
-			      <option value="ga">GA</option>
-			        <option value="rainbow">Rainbow</option>
-		</select>
+    <div class='container'>
+        <div class='row'>
+            <h4>Select model to visualize</h4>
+        		<select class='form-control-sm input-lg' id="algo" onchange="form_update();">
+        			  <option value="apex">Ape-X</option>
+        			  <option value="a2c">A2C</option>
+        			    <option value="dqn">DQN</option>
+        			      <option value="es">ES</option>
+        			      <option value="ga">GA</option>
+        			        <option value="rainbow">Rainbow</option>
+        		</select>
 
-		<select id="run" onchange="form_update();">
-			  <option value="1">Run 1</option>
-			  <option value="2">Run 2</option>
-			    <option value="3">Run 3</option>
-		</select>
+        		<select class='form-control-sm input-lg' id="run" onchange="form_update();">
+        			  <option value="1">Run 1</option>
+        			  <option value="2">Run 2</option>
+        			    <option value="3">Run 3</option>
+        		</select>
 
-		<select id="game" onchange="form_update();">
-			<option value="Alien">Alien</option>
-			<option value="Amidar">Amidar</option>
-			<option value="Assault">Assault</option>
-			<option value="Asterix">Asterix</option>
-			<option value="Asteroids">Asteroids</option>
-			<option value="Atlantis">Atlantis</option>
-			<option value="BankHeist">BankHeist</option>
-			<option value="BattleZone">BattleZone</option>
-			<option value="BeamRider">BeamRider</option>
-			<option value="Berzerk">Berzerk</option>
-			<option value="Bowling">Bowling</option>
-			<option value="Boxing">Boxing</option>
-			<option value="Breakout">Breakout</option>
-			<option value="Centipede">Centipede</option>
-			<option value="ChopperCommand">ChopperCommand</option>
-			<option value="CrazyClimber">CrazyClimber</option>
-			<option value="DemonAttack">DemonAttack</option>
-			<option value="DoubleDunk">DoubleDunk</option>
-			<option value="Enduro">Enduro</option>
-			<option value="FishingDerby">FishingDerby</option>
-			<option value="Freeway">Freeway</option>
-			<option value="Frostbite">Frostbite</option>
-			<option value="Gopher">Gopher</option>
-			<option value="Gravitar">Gravitar</option>
-			<option value="Hero">Hero</option>
-			<option value="IceHockey">IceHockey</option>
-			<option value="Jamesbond">Jamesbond</option>
-			<option value="Kangaroo">Kangaroo</option>
-			<option value="Krull">Krull</option>
-			<option value="KungFuMaster">KungFuMaster</option>
-			<option value="MontezumaRevenge">MontezumaRevenge</option>
-			<option value="MsPacman">MsPacman</option>
-			<option value="NameThisGame">NameThisGame</option>
-			<option value="Phoenix">Phoenix</option>
-			<option value="Pitfall">Pitfall</option>
-			<option value="Pong">Pong</option>
-			<option value="PrivateEye">PrivateEye</option>
-			<option value="Qbert">Qbert</option>
-			<option value="Riverraid">Riverraid</option>
-			<option value="RoadRunner">RoadRunner</option>
-			<option value="Robotank">Robotank</option>
-			<option value="Seaquest">Seaquest</option>
-			<option value="Skiing">Skiing</option>
-			<option value="Solaris">Solaris</option>
-			<option value="SpaceInvaders">SpaceInvaders</option>
-			<option value="StarGunner">StarGunner</option>
-			<option value="Tennis">Tennis</option>
-			<option value="TimePilot">TimePilot</option>
-			<option value="Tutankham">Tutankham</option>
-			<option value="UpNDown">UpNDown</option>
-			<option value="Venture">Venture</option>
-			<option value="VideoPinball">VideoPinball</option>
-			<option value="WizardOfWor">WizardOfWor</option>
-			<option value="YarsRevenge">YarsRevenge</option>
-			<option value="Zaxxon">Zaxxon</option>
-		</select>
+        		<select class='form-control-sm input-lg' id="game" onchange="form_update();">
+        			<option value="Alien">Alien</option>
+        			<option value="Amidar">Amidar</option>
+        			<option value="Assault">Assault</option>
+        			<option value="Asterix">Asterix</option>
+        			<option value="Asteroids">Asteroids</option>
+        			<option value="Atlantis">Atlantis</option>
+        			<option value="BankHeist">BankHeist</option>
+        			<option value="BattleZone">BattleZone</option>
+        			<option value="BeamRider">BeamRider</option>
+        			<option value="Berzerk">Berzerk</option>
+        			<option value="Bowling">Bowling</option>
+        			<option value="Boxing">Boxing</option>
+        			<option value="Breakout">Breakout</option>
+        			<option value="Centipede">Centipede</option>
+        			<option value="ChopperCommand">ChopperCommand</option>
+        			<option value="CrazyClimber">CrazyClimber</option>
+        			<option value="DemonAttack">DemonAttack</option>
+        			<option value="DoubleDunk">DoubleDunk</option>
+        			<option value="Enduro">Enduro</option>
+        			<option value="FishingDerby">FishingDerby</option>
+        			<option value="Freeway">Freeway</option>
+        			<option value="Frostbite">Frostbite</option>
+        			<option value="Gopher">Gopher</option>
+        			<option value="Gravitar">Gravitar</option>
+        			<option value="Hero">Hero</option>
+        			<option value="IceHockey">IceHockey</option>
+        			<option value="Jamesbond">Jamesbond</option>
+        			<option value="Kangaroo">Kangaroo</option>
+        			<option value="Krull">Krull</option>
+        			<option value="KungFuMaster">KungFuMaster</option>
+        			<option value="MontezumaRevenge">MontezumaRevenge</option>
+        			<option value="MsPacman">MsPacman</option>
+        			<option value="NameThisGame">NameThisGame</option>
+        			<option value="Phoenix">Phoenix</option>
+        			<option value="Pitfall">Pitfall</option>
+        			<option value="Pong">Pong</option>
+        			<option value="PrivateEye">PrivateEye</option>
+        			<option value="Qbert">Qbert</option>
+        			<option value="Riverraid">Riverraid</option>
+        			<option value="RoadRunner">RoadRunner</option>
+        			<option value="Robotank">Robotank</option>
+        			<option value="Seaquest">Seaquest</option>
+        			<option value="Skiing">Skiing</option>
+        			<option value="Solaris">Solaris</option>
+        			<option value="SpaceInvaders">SpaceInvaders</option>
+        			<option value="StarGunner">StarGunner</option>
+        			<option value="Tennis">Tennis</option>
+        			<option value="TimePilot">TimePilot</option>
+        			<option value="Tutankham">Tutankham</option>
+        			<option value="UpNDown">UpNDown</option>
+        			<option value="Venture">Venture</option>
+        			<option value="VideoPinball">VideoPinball</option>
+        			<option value="WizardOfWor">WizardOfWor</option>
+        			<option value="YarsRevenge">YarsRevenge</option>
+        			<option value="Zaxxon">Zaxxon</option>
+        		</select>
 
-		<select id="tag" onchange="form_update();">
-			<option value="final">Final</option>
-			<option value="400M">400M Frames</option>
-			<option value="1B">1B Frames</option>
-			<option value="1HR">1 hour</option>
-			<option value="2HR">2 hours</option>
-			<option value="4HR">4 hours</option>
-			<option value="6HR">6 hours</option>
-			<option value="10HR">10 hours</option>
-			<option value="initial">Initial</option>
-		</select>
-
-		</center>
-    <table><tr><td>	
-			    <canvas id="cvs" width="550" height="1000" style="cursor: crosshair; display: none">[No canvas support]</canvas></td>
-    <td>
-	    <canvas id="cvs2" width="500" height="500">[No canvas support]</canvas></td>
-    <td><canvas id="cvs3" width="500" height="500">[No canvas support]</canvas>
-    </td>
-	    </tr>
-    </table>
-
-    <b>Playback controls:</b><br/> 
-    <button id="resetButton">Rewind</button>
-    <button id="stopButton">Stop</button>
-    <button id="playButton">Play</button><br/>
-    <button id="slowButton">SlowMo</button>
-    <button id="framePlus">FramePlus</button>
-    <button id="frameMinus">FrameMinus</button><br/>
-    <br clear="all" />
-
-    <b>Advanced features:</b><br/>
-    <button id="toggleDrag">Toggle Draggable Timeline</button>
-    <button id="toggleActivation">Toggle Full Activation View</button>
+        		<select class='form-control-sm input-lg' id="tag" onchange="form_update();">
+        			<option value="final">Final</option>
+        			<option value="400M">400M Frames</option>
+        			<option value="1B">1B Frames</option>
+        			<option value="1HR">1 hour</option>
+        			<option value="2HR">2 hours</option>
+        			<option value="4HR">4 hours</option>
+        			<option value="6HR">6 hours</option>
+        			<option value="10HR">10 hours</option>
+        			<option value="initial">Initial</option>
+        		</select>
+        </div>
+    </div>
     <br/>
-    <button id="urlCopyButton">BookmarkURL</button>
-    <textarea id="urlText" rows="2" cols="80">
-    </textarea>
 
+    <div class='container'>
+        <div class='row'>
+            <table><tr><td>	
+        			    <canvas id="cvs" width="550" height="1000" style="cursor: crosshair; display: none">[No canvas support]</canvas></td>
+            <td>
+        	    <canvas id="cvs2" width="500" height="500">[No canvas support]</canvas></td>
+            <td><canvas id="cvs3" width="500" height="500">[No canvas support]</canvas>
+            </td>
+        	    </tr>
+            </table>
+        </div>
+
+        <video id="atarivideo" !autoplay controls loop style="width: 200px; display: none"></video>
+    </div>
+    <br/>
+
+    <div class='container'>
+        <div class='row'>
+            <h4>Playback controls</h4>
+            <button type="button" class="btn btn-default btn-small" id="resetButton">
+                <span class="glyphicon glyphicon-backward" aria-hidden="true"></span> Rewind
+            </button>
+            <button type="button" class="btn btn-default btn-small" id="stopButton">
+                <span class="glyphicon glyphicon-stop" aria-hidden="true"></span> Stop
+            </button>
+            <button type="button" class="btn btn-default btn-small" id="playButton">
+                <span class="glyphicon glyphicon-play" aria-hidden="true"></span> Play
+            </button>
+            <button type="button" class="btn btn-default btn-small" id="slowButton">
+                <span class="glyphicon glyphicon-play" aria-hidden="true"></span> SlowMo
+            </button>
+            <button type="button" class="btn btn-default btn-small" id="framePlus">
+                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> FramePlus
+            </button>
+            <button type="button" class="btn btn-default btn-small" id="frameMinus">
+                <span class="glyphicon glyphicon-minus" aria-hidden="true"></span> FrameMinus
+            </button><br/>
+        </div>
+    </div>
     <br clear="all" />
 
+    <div class="container">
+        <div class="row">
+            <h4>Advanced features</h4>
+            <button type="button" class="btn btn-primary btn-small" id="toggleDrag">Toggle Draggable Timeline</button>
+            <button type="button" class="btn btn-primary btn-small" id="toggleActivation">Toggle Full Activation View</button>
+        </div>
+    </div>
 
+    <div class="container">
+        <div class="row">
+            <br/><br/>
+            <button type="button" class="btn btn-default btn-small" id="urlCopyButton">BookmarkURL</button>
+            <textarea class='form-control' id="urlText" rows="2" cols="80">
+            </textarea>
+        </div>
+    </div>
 
-		<br/>Note this webapp borrows from <a href="https://www.rgraph.net/blog/an-example-of-html5-canvas-video-zoom.html">this very helpful demo</a>.<br/>
+    <br clear="all" />
+    <br/>
+    <div class="container">
+        <div class="row">
+           <b> Note this webapp borrows from <a href="https://www.rgraph.net/blog/an-example-of-html5-canvas-video-zoom.html">this very helpful demo</a>.</b><br/>
+        </div>
+    </div>
 </body>
 </html>
