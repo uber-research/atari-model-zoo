@@ -90,7 +90,7 @@ To cite this work in publications, please use the following BibTex entry:
 ```
 @inproceedings{
 title = {An Atari Model Zoo for Analyzing, Visualizing, and Comparing Deep Reinforcement Learning Agents},
-author = {Felipe Such, Vashish Madhavan, Rosanne Liu, Rui Wang, Pablo Castro, Yulun Li, Ludwig Schubert, Marc Bellemare, Jeff Clune, Joel Lehman},
+author = {Felipe Such, Vashish Madhavan, Rosanne Liu, Rui Wang, Pablo Castro, Yulun Li, Ludwig Schubert, Marc G. Bellemare, Jeff Clune, Joel Lehman},
 booktitle = {Proceedings of the Deep RL Workshop at NeurIPS 2018},
 year = {2018},
 }
