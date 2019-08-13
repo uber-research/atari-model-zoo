@@ -4,7 +4,7 @@ The aim of this project is to disseminate deep reinforcement learning agents tra
 research into understanding reinforcement learning agents. 
 This project makes use of the excellent [Lucid](https://github.com/tensorflow/lucid) neural network visualization library, and integrates with the [Dopamine](https://github.com/google/dopamine) [model release](https://github.com/google/dopamine/tree/master/docs#downloads).
 
-A paper introducing this work was published at the Deep RL workshop at NeurIPS 2018: [An Atari Model Zoo for Analyzing, Visualizing, and Comparing Deep Reinforcement Learning Agents](https://drive.google.com/open?id=0B_utB5Y8Y6D5OHdCbjFuYmtrZnBLVGkwZEdocU5YRVVLOFFZ).
+A paper introducing this work was published at IJCAI 2019: [An Atari Model Zoo for Analyzing, Visualizing, and Comparing Deep Reinforcement Learning Agents](https://arxiv.org/abs/1812.07069).
 
 ## About
 
@@ -77,6 +77,7 @@ We trained four algorithms ourselves:
 * [GA](https://arxiv.org/abs/1712.06567) - we used the [fast GPU implementation version released by Uber](https://github.com/uber-research/deep-neuroevolution)
 * [ES](https://arxiv.org/abs/1703.03864) - we used the [fast GPU version released by Uber](https://github.com/uber-research/deep-neuroevolution)
 * [Ape-X](https://arxiv.org/abs/1803.00933) - we used the [replication released by Uber](https://github.com/uber-research/ape-x)
+* [IMPALA](https://arxiv.org/abs/1802.01561) - we used the [released code from DeepMind](https://github.com/deepmind/scalable_agent)
 
 We took trained final models from two algorithms (DQN and Rainbow) from the [Dopamine model release](https://ai.googleblog.com/2018/08/introducing-new-framework-for-flexible.html):
 
@@ -90,9 +91,9 @@ To cite this work in publications, please use the following BibTex entry:
 ```
 @inproceedings{
 title = {An Atari Model Zoo for Analyzing, Visualizing, and Comparing Deep Reinforcement Learning Agents},
-author = {Felipe Such, Vashish Madhavan, Rosanne Liu, Rui Wang, Pablo Castro, Yulun Li, Ludwig Schubert, Marc G. Bellemare, Jeff Clune, Joel Lehman},
-booktitle = {Proceedings of the Deep RL Workshop at NeurIPS 2018},
-year = {2018},
+author = {Felipe Such, Vashish Madhavan, Rosanne Liu, Rui Wang, Pablo Castro, Yulun Li, Jiale Zhi, Ludwig Schubert, Marc G. Bellemare, Jeff Clune, Joel Lehman},
+booktitle = {Proceedings of IJCAI 2019},
+year = {2019},
 }
 ```
 

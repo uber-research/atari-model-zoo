@@ -1,0 +1,6 @@
+tensorflow-gpu
+matplotlib
+moviepy
+gym
+lucid
+pandas
