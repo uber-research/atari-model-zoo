@@ -14,11 +14,12 @@ training environments, which is hosted online.
 ## Installation and Setup
 
 Dependencies:
-* [tensorflow](https://github.com/tensorflow/tensorflow) (with version >0.8)
-* [lucid](https://github.com/tensorflow/lucid)
+* [tensorflow](https://github.com/tensorflow/tensorflow) (with version >0.8 <2.0; *we are not currently supporting TF 2.x*)
+* [lucid](https://github.com/tensorflow/lucid) (version
 * [matplotlib](https://matplotlib.org/) for some visualiztions
 * [moviepy](https://zulko.github.io/moviepy/) (optional for making movies) 
 * [gym](https://github.com/openai/gym) (installed with support for Atari; optional for generating new rollouts)
+* [opencv-python](https://pypi.org/project/opencv-python/) (optional for generating new rollouts)
 * [tensorflow-onnx](https://github.com/onnx/tensorflow-onnx) (optional for exporting to [ONNX](https://onnx.ai/) format)
 
 To install, run ```setup.py install``` after installing dependencies.
