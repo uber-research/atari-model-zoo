@@ -30,7 +30,7 @@ class NoopResetEnv(gym.Wrapper):
         self.override_num_noops = None
         assert env.unwrapped.get_action_meanings()[0] == 'NOOP'
 
-    def _reset(self):
+    def reset(self):
         """ Do no-op action for a number of steps in [1, noop_max]."""
         self.env.reset()
         if self.override_num_noops is not None:
@@ -52,7 +52,7 @@ class FireResetEnv(gym.Wrapper):
         assert env.unwrapped.get_action_meanings()[1] == 'FIRE'
         assert len(env.unwrapped.get_action_meanings()) >= 3
 
-    def _reset(self):
+    def reset(self):
         self.env.reset()
         obs, _, done, _ = self.env.step(1)
         if done:
@@ -71,7 +71,7 @@ class EpisodicLifeEnv(gym.Wrapper):
         self.lives = 0
         self.was_real_done  = True
 
-    def _step(self, action):
+    def step(self, action):
         obs, reward, done, info = self.env.step(action)
         self.was_real_done = done
         # check current lives, make loss of life terminal,
@@ -85,7 +85,7 @@ class EpisodicLifeEnv(gym.Wrapper):
         self.lives = lives
         return obs, reward, done, info
 
-    def _reset(self):
+    def reset(self):
         """Reset only when lives are exhausted.
         This way all states are still reachable even though lives are episodic,
         and the learner need not know about any of this behind-the-scenes.
@@ -107,7 +107,7 @@ class MaxAndSkipEnv(gym.Wrapper):
         self._skip       = skip
         self.viewer = None
 
-    def _step(self, action):
+    def step(self, action):
         """Repeat action, sum reward, and max over last observations."""
         total_reward = 0.0
         done = None
@@ -121,7 +121,7 @@ class MaxAndSkipEnv(gym.Wrapper):
 
         return max_frame, total_reward, done, info
 
-    def _reset(self):
+    def reset(self):
         """Clear past frame buffer and init. to first obs. from inner env."""
         self._obs_buffer.clear()
         obs = self.env.reset()
@@ -159,15 +159,15 @@ class WarpFrameTF(gym.ObservationWrapper):
         self.inp_shape = [None]+list(env.observation_space.shape[:2])+[1,]
         self.x_t = tf.placeholder(tf.float32, self.inp_shape,name='warp_ph')
         self.warp_size = warp_size
-        self.transform_op = self._transform(self.x_t)
+        self.transform_op = self.transform(self.x_t)
 
-    def _transform(self,obs):
+    def transform(self,obs):
         obs = tf.image.resize_bilinear(obs, self.warp_size, align_corners=True)
         obs = tf.reshape(obs, self.warp_size + (1,))
         return obs
 
 
-    def _observation(self, obs):
+    def observation(self, obs):
         frame = np.dot(obs.astype('float32'), np.array([0.299, 0.587, 0.114], 'float32'))
         frame = frame[np.newaxis,:]
         frame = frame[...,np.newaxis]
@@ -181,7 +181,7 @@ class WarpFrameTF(gym.ObservationWrapper):
             from gym.envs.classic_control import rendering
             if self.viewer is None:
                 self.viewer = rendering.SimpleImageViewer()
-            img = self._observation(self.env._render('rgb_array', close)) * np.ones([1, 1, 3], dtype=np.uint8)
+            img = self.observation(self.env._render('rgb_array', close)) * np.ones([1, 1, 3], dtype=np.uint8)
             self.viewer.imshow(img)
             return img
         else:
@@ -197,7 +197,7 @@ class WarpFrame(gym.ObservationWrapper):
         self.viewer = None
         self.show_warped = show_warped
 
-    def _observation(self, obs):
+    def observation(self, obs):
         frame = np.dot(obs.astype('float32'), np.array([0.299, 0.587, 0.114], 'float32'))
         frame = np.array(Image.fromarray(frame).resize((self.res, self.res),
             resample=Image.BILINEAR), dtype=np.uint8)
@@ -210,7 +210,7 @@ class WarpFrame(gym.ObservationWrapper):
             from gym.envs.classic_control import rendering
             if self.viewer is None:
                 self.viewer = rendering.SimpleImageViewer()
-            img = self._observation(self.env._render('rgb_array', close)) * np.ones([1, 1, 3], dtype=np.uint8)
+            img = self.observation(self.env._render('rgb_array', close)) * np.ones([1, 1, 3], dtype=np.uint8)
             self.viewer.imshow(img)
             return img
         else:
@@ -226,18 +226,18 @@ class FrameStack(gym.Wrapper):
         assert shp[2] == 1  # can only stack 1-channel frames
         self.observation_space = spaces.Box(low=0, high=255, shape=(shp[0], shp[1], k))
 
-    def _reset(self):
+    def reset(self):
         """Clear buffer and re-fill by duplicating the first observation."""
         ob = self.env.reset()
         for _ in range(self.k): self.frames.append(ob)
-        return self._observation()
+        return self.observation()
 
-    def _step(self, action):
+    def step(self, action):
         ob, reward, done, info = self.env.step(action)
         self.frames.append(ob)
-        return self._observation(), reward, done, info
+        return self.observation(), reward, done, info
 
-    def _observation(self):
+    def observation(self):
         assert len(self.frames) == self.k
         return np.concatenate(self.frames, axis=2)
 
@@ -245,7 +245,7 @@ class ScaledFloatFrame(gym.ObservationWrapper):
     def __init__(self,env,scale=(1/255.0)):
         gym.ObservationWrapper.__init__(self, env)
         self.scale = scale
-    def _observation(self, obs):
+    def observation(self, obs):
     # careful! This undoes the memory optimization, use
     # with smaller replay buffers only.
         return np.array(obs).astype(np.float32) * self.scale
@@ -257,7 +257,7 @@ class DiscretizeActions(gym.Wrapper):
         self.temp_action = env.action_space
         self.action_space = spaces.Discrete(5 ** int(np.prod(env.action_space.shape)))
 
-    def _step(self, action):
+    def step(self, action):
         cont_action = self.temp_action.low.copy()
         for i in range(cont_action.size):
             cont_action[i] += (self.temp_action.high[i] - self.temp_action.low[i]) * float(int(action) % 5) / 4.0
